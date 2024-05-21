@@ -1,0 +1,251 @@
+README para main.py
+Descripción general
+El archivo main.py contiene una serie de pruebas automatizadas para la aplicación Urban Routes. Utiliza Selenium WebDriver para interactuar con la interfaz de usuario de la aplicación y verificar diversas funcionalidades, como la configuración de rutas, selección de comodidad, entrada de números de teléfono, métodos de pago y más. El archivo se basa en datos de configuración proporcionados por el módulo data.
+
+Requisitos
+Python 3.x
+Selenium WebDriver
+Google Chrome y ChromeDriver
+Módulos adicionales: data, helpers, UrbanRoutesPage
+Instalación
+Instalar Selenium:
+
+bash
+Copy code
+pip install selenium
+Asegurarse de tener Google Chrome instalado y que el ChromeDriver corresponda con la versión de Chrome instalada. Descargar ChromeDriver desde aquí.
+
+Clonar el repositorio que contiene data.py, helpers.py y UrbanRoutesPage.py y asegurarse de que estén en el mismo directorio que main.py.
+
+Estructura del archivo
+El archivo main.py está estructurado de la siguiente manera:
+
+Imports: Importa los módulos necesarios (data, selenium.webdriver, helpers, UrbanRoutesPage).
+Clase TestUrbanRoutes: Contiene los métodos de prueba que verifican diversas funcionalidades de la aplicación Urban Routes.
+Métodos de configuración y limpieza: setup_class y teardown_class para inicializar y cerrar el WebDriver.
+Métodos de prueba: Cada método (test0_acces_page, test1_set_route, etc.) realiza una acción específica y verifica el resultado esperado.
+Uso
+Ejecución de las pruebas
+Clonar el repositorio y asegurarse de que todos los archivos necesarios estén en el mismo directorio.
+Ejecutar el script de prueba usando un framework de pruebas como pytest:
+bash
+Copy code
+pytest main.py
+Descripción de los métodos de prueba
+test0_acces_page: Accede a la página de Urban Routes y verifica que el logotipo principal se cargue correctamente.
+test1_set_route: Establece la dirección de origen y destino y verifica que se hayan configurado correctamente.
+test2_select_confort: Selecciona la opción de confort y verifica la selección.
+test3_set_phone: Ingresa un número de teléfono, recibe un código SMS y verifica que el número se haya configurado correctamente.
+test4_add_card: Añade una tarjeta de crédito y verifica que los detalles se hayan ingresado correctamente.
+test5_message_for_driver: Ingresa un mensaje para el conductor y verifica que se haya configurado correctamente.
+test6_blanket_active: Activa la opción de manta y verifica que esté activada.
+test7_order_2_ice_creams: Pide dos helados y verifica la cantidad.
+test8_taxi_request_modal_display: Solicita un taxi y verifica que se muestre el modal de solicitud.
+test9_check_show_name_driver_modal: Verifica que el nombre del conductor aparezca en el modal de solicitud de taxi.
+Notas
+Asegúrese de que el archivo data.py contenga las variables necesarias y esté configurado correctamente.
+Verifique que ChromeDriver esté en el PATH o especifique la ruta al inicializar el WebDriver.
+Las pruebas asumen que los elementos de la página web tienen selectores específicos definidos en UrbanRoutesPage.py.
+
+README para data.py
+Descripción general
+El archivo data.py contiene una serie de variables que son utilizadas para automatizar la aplicación Urban Routes. Estas variables incluyen URLs para acceder a datos de rutas urbanas, direcciones de origen y destino, información de contacto, detalles de pago y un mensaje para el conductor. Este archivo sirve como un módulo de configuración esencial para la aplicación.
+
+Variables
+urban_routes_url
+Tipo: Cadena de texto (String)
+Descripción: URL para acceder a los datos de rutas urbanas. Incluye un parámetro de consulta para especificar el idioma (en este caso, español).
+Ejemplo:
+python
+Copy code
+urban_routes_url = 'https://cnt-83df1712-5ac9-457c-8600-c921076fd414.containerhub.tripleten-services.com?lng=es'
+address_from
+Tipo: Cadena de texto (String)
+Descripción: Dirección de origen de la ruta.
+Ejemplo:
+python
+Copy code
+address_from = 'East 2nd Street, 601'
+address_to
+Tipo: Cadena de texto (String)
+Descripción: Dirección de destino de la ruta.
+Ejemplo:
+python
+Copy code
+address_to = '1300 1st St'
+phone_number
+Tipo: Cadena de texto (String)
+Descripción: Número de teléfono de contacto.
+Ejemplo:
+python
+Copy code
+phone_number = '+1 123 123 12 12'
+card_number, card_code
+Tipo: Tupla de cadenas de texto (Tuple of Strings)
+Descripción: Información de la tarjeta de crédito, incluyendo el número de la tarjeta y el código de seguridad.
+Ejemplo:
+python
+Copy code
+card_number, card_code = '1234 5678 9100', '111'
+message_for_driver
+Tipo: Cadena de texto (String)
+Descripción: Mensaje para el conductor, que puede incluir instrucciones especiales o información adicional.
+Ejemplo:
+python
+Copy code
+message_for_driver = 'Muéstrame el camino al museo'
+Uso
+Las variables definidas en este archivo pueden ser importadas y utilizadas en otros scripts o módulos de Python para proporcionar los datos necesarios para la automatización de la aplicación Urban Routes. Por ejemplo:
+
+python
+Copy code
+from data import urban_routes_url, address_from, address_to, phone_number, card_number, card_code, message_for_driver
+
+def planificar_ruta():
+    print(f"Planificando ruta desde {address_from} hasta {address_to}")
+    print(f"Teléfono de contacto: {phone_number}")
+    print(f"Mensaje para el conductor: {message_for_driver}")
+    # Implementación adicional aquí
+Notas
+Es importante asegurar que el archivo data.py se almacene de manera segura, especialmente si contiene información sensible como números de teléfono y detalles de tarjetas de crédito.
+Si se integra con servicios externos, asegúrese de que la URL proporcionada en urban_routes_url sea correcta y que el servicio sea accesible.
+
+
+README para helpers.py
+Descripción general
+El archivo helpers.py contiene funciones auxiliares utilizadas en las pruebas automatizadas de la aplicación Urban Routes. Estas funciones proporcionan métodos para esperar a que los elementos de la página sean visibles o clickeables, y para recuperar el código de confirmación del teléfono desde los logs del navegador.
+
+Funciones
+retrieve_phone_code(driver) -> str
+Esta función recupera el código de confirmación del teléfono desde los logs de rendimiento del navegador y lo devuelve como una cadena de texto.
+
+Parámetros:
+driver: El WebDriver de Selenium que controla el navegador.
+Retorno:
+El código de confirmación del teléfono como una cadena de texto.
+Descripción:
+La función busca en los logs de rendimiento del navegador la respuesta de la API que contiene el código de confirmación del teléfono. Debe ser llamada solo después de que se haya solicitado el código de confirmación en la aplicación.
+Excepciones:
+Lanza una excepción si no se encuentra el código de confirmación después de varios intentos.
+Ejemplo:
+python
+Copy code
+codigo_confirmacion = retrieve_phone_code(driver)
+wait_visibility_of_element(driver, element, w_time)
+Esta función espera hasta que un elemento específico sea visible en la página.
+
+Parámetros:
+driver: El WebDriver de Selenium que controla el navegador.
+element: El localizador del elemento que se espera que sea visible.
+w_time: El tiempo máximo de espera en segundos.
+Descripción:
+Utiliza WebDriverWait y expected_conditions de Selenium para esperar hasta que el elemento sea visible en la página.
+Ejemplo:
+python
+Copy code
+wait_visibility_of_element(driver, element, 10)
+wait_to_be_clickable_of_element(driver, element, w_time)
+Esta función espera hasta que un elemento específico sea clickeable en la página.
+
+Parámetros:
+driver: El WebDriver de Selenium que controla el navegador.
+element: El localizador del elemento que se espera que sea clickeable.
+w_time: El tiempo máximo de espera en segundos.
+Descripción:
+Utiliza WebDriverWait y expected_conditions de Selenium para esperar hasta que el elemento sea clickeable en la página.
+Ejemplo:
+python
+Copy code
+wait_to_be_clickable_of_element(driver, element, 10)
+Instalación
+Asegúrese de tener Selenium instalado:
+bash
+Copy code
+pip install selenium
+Uso
+Importe las funciones necesarias en su script de prueba y utilícelas para mejorar la sincronización y la recuperación de datos durante las pruebas.
+
+python
+Copy code
+from helpers import retrieve_phone_code, wait_visibility_of_element, wait_to_be_clickable_of_element
+
+# Ejemplo de uso en una prueba
+wait_visibility_of_element(driver, element, 10)
+codigo_confirmacion = retrieve_phone_code(driver)
+Notas
+Estas funciones están diseñadas para ser utilizadas con WebDriver de Selenium.
+Asegúrese de que los elementos pasados a las funciones sean localizadores válidos de Selenium.
+Utilice retrieve_phone_code solo después de haber solicitado el código en su aplicación, de lo contrario, puede que no encuentre el código en los logs.
+
+README para UrbanRoutesPage.py
+Descripción general
+El archivo UrbanRoutesPage.py contiene una clase que encapsula los elementos de la página web de Urban Routes y proporciona métodos para interactuar con ellos. Esta clase utiliza Selenium WebDriver para realizar acciones como ingresar direcciones, seleccionar opciones de confort, agregar métodos de pago, y más.
+
+Clase UrbanRoutesPage
+La clase UrbanRoutesPage define los selectores y métodos necesarios para interactuar con la interfaz de usuario de la aplicación Urban Routes.
+
+Selectores de elementos
+La clase contiene varios selectores de elementos que identifican los diferentes componentes de la página web. Estos selectores utilizan estrategias como By.ID, By.CLASS_NAME, By.XPATH y By.CSS_SELECTOR para ubicar los elementos.
+
+Métodos
+Inicialización
+python
+Copy code
+def _init_(self, driver):
+    self.driver = driver
+Inicializa la clase con una instancia del WebDriver de Selenium.
+
+Métodos de interacción con elementos
+set_from(from_address): Ingresa una dirección en el campo "desde".
+set_to(to_address): Ingresa una dirección en el campo "hasta".
+get_from(): Obtiene el valor del campo "desde".
+get_to(): Obtiene el valor del campo "hasta".
+click_botton_round(): Hace click en el botón "Pedir un taxi".
+click_confort_select(): Hace click en el botón "Confort".
+click_check_confort_select(): Verifica si el botón "Confort" está seleccionado.
+click_phone_number_home_page(): Hace click en el botón para ingresar número de teléfono.
+set_phone_number(number_phone): Ingresa un número de teléfono.
+get_phone_number(): Obtiene el número de teléfono ingresado.
+click_phone_number_pop_up_window(): Hace click en el botón para agregar el número de teléfono desde la ventana emergente.
+set_sms_code(code_sms): Ingresa el código SMS recibido.
+click_next_code_phone(): Hace click en el botón "Siguiente" de la ventana emergente del número de teléfono.
+check_send_phone_code(): Verifica si el código de teléfono fue enviado.
+click_payment_method(): Hace click en el botón "Método de pago".
+click_add_card(): Hace click en el botón "Añadir una tarjeta".
+set_card_number(number_card): Ingresa el número de tarjeta.
+set_code_number(code_card): Ingresa el código de la tarjeta.
+get_card_number(): Obtiene el número de tarjeta ingresado.
+get_code_number(): Obtiene el código de la tarjeta ingresado.
+click_add_card_2nd_pop_up_window(): Hace click en el botón "Añadir una tarjeta" en la segunda ventana emergente.
+check_agree_tcard(): Verifica si la tarjeta fue agregada correctamente.
+click_close_pop_up_card_windows(): Hace click para cerrar la ventana emergente de la tarjeta.
+set_message_for_driver(driver_message): Ingresa un mensaje para el conductor.
+get_message_for_driver(): Obtiene el mensaje ingresado para el conductor.
+click_blanket_selector(): Hace click para seleccionar manta y pañuelos.
+get_blanket_value(): Obtiene el valor de la opción de manta.
+click_ice_cream_plus(): Hace click para agregar helados.
+get_ice_cream_value(): Obtiene la cantidad de helados agregados.
+click_find_taxi(): Hace click para pedir un taxi.
+check_botton_find_taxi(): Verifica si el botón "Buscar taxi" está visible.
+check_taxi_driver_selected(): Verifica si un conductor de taxi ha sido seleccionado.
+check_order_header_title(): Verifica si el título del encabezado de la orden está visible.
+Instalación
+Asegúrese de tener Selenium instalado:
+bash
+Copy code
+pip install selenium
+Uso
+Importe la clase UrbanRoutesPage en su script de prueba y utilícela para interactuar con la página web de Urban Routes.
+
+python
+Copy code
+from UrbanRoutesPage import UrbanRoutesPage
+
+# Ejemplo de uso en una prueba
+page = UrbanRoutesPage(driver)
+page.set_from("Dirección de origen")
+page.set_to("Dirección de destino")
+page.click_botton_round()
+Notas
+Asegúrese de que los elementos en la página web tengan los selectores correctos definidos en esta clase.
+Utilice los métodos de esta clase para interactuar con los elementos de la página durante las pruebas automatizadas.
